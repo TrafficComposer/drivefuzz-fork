@@ -124,7 +124,7 @@ if { ${SHOULD_BUILD_BOOST} ; } ; then
   BOOST_PACKAGE_BASENAME=boost_${BOOST_VERSION//./_}
 
   log "Retrieving boost."
-  wget "https://dl.bintray.com/boostorg/release/${BOOST_VERSION}/source/${BOOST_PACKAGE_BASENAME}.tar.gz" || true
+  wget "https://archives.boost.io/release/1.72.0/source/boost_1_72_0.tar.gz" || true
   # try to use the backup boost we have in Jenkins
   if [[ ! -f "${BOOST_PACKAGE_BASENAME}.tar.gz" ]] ; then
     log "Using boost backup"
@@ -143,7 +143,7 @@ if { ${SHOULD_BUILD_BOOST} ; } ; then
   pushd ${BOOST_BASENAME}-source >/dev/null
 
   BOOST_TOOLSET="clang-8.0"
-  BOOST_CFLAGS="-fPIC -std=c++14 -DBOOST_ERROR_CODE_HEADER_ONLY"
+  BOOST_CFLAGS="-fPIC -std=c++14 -DBOOST_ERROR_CODE_HEADER_ONLY -Wno-reserved-id-macro -Wno-deprecated-declarations"
 
   py3="/usr/bin/env python${PY_VERSION}"
   py3_root=`${py3} -c "import sys; print(sys.prefix)"`
@@ -218,7 +218,7 @@ else
   pushd ${RPCLIB_BASENAME}-libcxx-build >/dev/null
 
   cmake -G "Ninja" \
-      -DCMAKE_CXX_FLAGS="-fPIC -std=c++14 -stdlib=libc++ -I${LLVM_INCLUDE} -Wl,-L${LLVM_LIBPATH} -DBOOST_NO_EXCEPTIONS -DASIO_NO_EXCEPTIONS" \
+      -DCMAKE_CXX_FLAGS="-fPIC -std=c++14 -stdlib=libstdc++   -DBOOST_NO_EXCEPTIONS -DASIO_NO_EXCEPTIONS" \
       -DCMAKE_INSTALL_PREFIX="../${RPCLIB_BASENAME}-libcxx-install" \
       ../${RPCLIB_BASENAME}-source
 
@@ -235,7 +235,7 @@ else
   pushd ${RPCLIB_BASENAME}-libstdcxx-build >/dev/null
 
   cmake -G "Ninja" \
-      -DCMAKE_CXX_FLAGS="-fPIC -std=c++14" \
+      -DCMAKE_CXX_FLAGS="-fPIC -std=c++14 -Wno-reserved-id-macro -Wno-deprecated-declarations" \
       -DCMAKE_INSTALL_PREFIX="../${RPCLIB_BASENAME}-libstdcxx-install" \
       ../${RPCLIB_BASENAME}-source
 
@@ -282,7 +282,7 @@ else
   pushd ${GTEST_BASENAME}-libcxx-build >/dev/null
 
   cmake -G "Ninja" \
-      -DCMAKE_CXX_FLAGS="-std=c++14 -stdlib=libc++ -I${LLVM_INCLUDE} -Wl,-L${LLVM_LIBPATH} -DBOOST_NO_EXCEPTIONS -fno-exceptions" \
+      -DCMAKE_CXX_FLAGS="-std=c++14 -stdlib=libstdc++   -DBOOST_NO_EXCEPTIONS -fno-exceptions" \
       -DCMAKE_INSTALL_PREFIX="../${GTEST_BASENAME}-libcxx-install" \
       ../${GTEST_BASENAME}-source
 
@@ -421,7 +421,7 @@ XERCESC_VERSION=3.2.3
 XERCESC_BASENAME=xerces-c-${XERCESC_VERSION}
 
 XERCESC_TEMP_FOLDER=${XERCESC_BASENAME}
-XERCESC_REPO=https://ftp.cixug.es/apache//xerces/c/3/sources/xerces-c-${XERCESC_VERSION}.tar.gz
+XERCESC_REPO=https://archive.apache.org/dist/xerces/c/3/sources/xerces-c-${XERCESC_VERSION}.tar.gz
 
 XERCESC_SRC_DIR=${XERCESC_BASENAME}-source
 XERCESC_INSTALL_DIR=${XERCESC_BASENAME}-install
@@ -461,7 +461,7 @@ fi
 # -- Generate Version.h --------------------------------------------------------
 # ==============================================================================
 
-CARLA_VERSION=0.9.10.1
+CARLA_VERSION=$(get_git_repository_version)
 
 log "CARLA version ${CARLA_VERSION}."
 
@@ -505,7 +505,7 @@ cp ${LIBSTDCPP_TOOLCHAIN_FILE}.gen ${LIBCPP_TOOLCHAIN_FILE}.gen
 
 cat >>${LIBCPP_TOOLCHAIN_FILE}.gen <<EOL
 
-set(CMAKE_CXX_FLAGS "\${CMAKE_CXX_FLAGS} -stdlib=libc++" CACHE STRING "" FORCE)
+set(CMAKE_CXX_FLAGS "\${CMAKE_CXX_FLAGS} -stdlib=libstdc++" CACHE STRING "" FORCE)
 set(CMAKE_CXX_FLAGS "\${CMAKE_CXX_FLAGS} -isystem ${LLVM_INCLUDE}" CACHE STRING "" FORCE)
 set(CMAKE_CXX_FLAGS "\${CMAKE_CXX_FLAGS} -fno-exceptions -fno-rtti" CACHE STRING "" FORCE)
 set(CMAKE_CXX_LINK_FLAGS "\${CMAKE_CXX_LINK_FLAGS} -L${LLVM_LIBPATH}" CACHE STRING "" FORCE)

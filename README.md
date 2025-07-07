@@ -1,5 +1,14 @@
 # **Note**: This repository is a fork of [drivefuzz](https://gitlab.com/s3lab-code/public/drivefuzz) and is not the official version.
 
+Some resources that the original DriveFuzz depends on have become outdated.
+The authors of [TrafficComposer](https://github.com/TrafficComposer/TrafficComposer) have modified the DriveFuzz repository to address these issues.
+
+Summary of modifications:
+
+- Updated `carla/Util/BuildTools/Setup.sh`.
+
+- Changed the default port in `src/config.py` Line 47: `self.sim_tm_port = 8000` -> `self.sim_tm_port = 5000`.
+
 # DriveFuzz
 
 DriveFuzz is a feedback-driven fuzzing framework for testing autonomous

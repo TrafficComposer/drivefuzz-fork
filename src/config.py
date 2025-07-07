@@ -44,7 +44,7 @@ class Config:
         # simulator config
         self.sim_host = "localhost"
         self.sim_port = 2000
-        self.sim_tm_port = 8000
+        self.sim_tm_port = 5000
 
         # Fuzzer config
         self.max_cycles = 0
