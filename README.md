@@ -1,3 +1,5 @@
+# **Note**: This repository is a fork of [drivefuzz](https://gitlab.com/s3lab-code/public/drivefuzz) and is not the official version.
+
 # DriveFuzz
 
 DriveFuzz is a feedback-driven fuzzing framework for testing autonomous
